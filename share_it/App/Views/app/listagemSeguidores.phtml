@@ -1,0 +1,130 @@
+<nav class="navbar navbar-expand-lg menu">
+	<div class="container justify-content-center">
+	  <div class="navbar-nav">
+	  	<a class="menuItem" href="/timeline">
+	  		Timeline
+	  	</a>
+
+	  	<a class="menuItem" href="/sair">
+	  		Sair
+	  	</a>
+		
+	  </div>
+	</div>
+</nav>
+
+<div class="container mt-5">
+	<div class="row pt-2">
+		
+		<div class="col-md-3">
+
+			<div class="perfil">
+				<div class="perfilTopo">
+
+				</div>
+
+				<div class="perfilPainel">
+					
+					<div class="row mt-2 mb-2">
+						<div class="col mb-2">
+							<span class="perfilPainelNome">
+								<?= $this->view->info_utilizador['nome']?>		
+								</span>
+						</div>
+					</div>
+
+					<div class="row mb-2">
+
+						<div class="col">
+							<span class="perfilPainelItem">Posts</span><br />
+							<span class="perfilPainelItemValor">
+								<a href="/timeline">
+								<?= $this->view->total_posts['total_posts'] ?>
+								</a>
+							</span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">A seguir</span><br />
+							<span class="perfilPainelItemValor">
+								<a>
+								<?= $this->view->total_a_seguir['total_a_seguir'] ?>
+								</a>
+							</span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">Seguidores</span><br />
+							<span class="perfilPainelItemValor">
+								<?= $this->view->total_seguidores['total_seguidores'] ?>
+							</span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-6">
+			
+			<div class="row mb-2">
+				<div class="col">
+					<div class="card">
+						<div class="card-body">
+							<form method="get" action="/quem_seguir">
+								<div class="input-group mb-3">
+									<input type="text" name="pesquisarPor" class="form-control" placeholder="De quem está a procura?">
+									<div class="input-group-append">
+										<button class="btn btn-primary" type="submit">Procurar</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="list-group-item d-flex align-items-center">
+                                        <img  alt="" width="50px" class="rounded-sm ml-n2" />
+                                        <div class="flex-fill pl-3 pr-3">
+                                            <div><a href="#" class="text-dark font-weight-600">Teste</a></div>                                  
+                                        </div>
+                                        <a href="#" class="btn btn-outline-primary">Follow</a>
+                                    </div>
+
+			<?php foreach($this->view->utilizadores as $indice_arr => $utilizador) { ?>
+
+			<div class="row mb-2">
+				<div class="col">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6">
+									<?= $utilizador['nome']?>
+								</div>
+							
+								<div class="col-md-6 d-flex justify-content-end">
+									<div>
+										<?php if($utilizador['following'] == 0) {?>
+										<a href="/acao?acao=follow&id_utilizador=<?=$utilizador['id']?>" class="btn btn-success">Seguir</a>
+									<?php } ?>
+
+									<?php if($utilizador['following'] == 1) {?>
+										<a href="/acao?acao=unfollow&id_utilizador=<?=$utilizador['id']?>" class="btn btn-danger">Deixar de seguir</a>
+									<?php } ?>
+																		
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<?php } ?>
+
+		</div>
+	</div>
+</div>

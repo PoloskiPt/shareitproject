@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg menu">
+	<div class="container justify-content-center">
+	  <div class="navbar-nav">
+	  	<a class="menuItem" href="/timeline">
+	  		Timeline
+	  	</a>
+	   	
+	  	<a class="menuItem" href="/sair">
+	  		Sair
+	  	</a>
+			
+	  </div>
+	</div>
+</nav>
+<div class="container mt-5">
+  <div class="d-flex justify-content-center mt-5">
+    <div class="mt-5" style="width: 36rem;">
+      <div class="card-body">
+
+        <div class="d-flex justify-content-center">
+          <img src="" />
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <h2 class="text-primary	">Definições de conta</h2><h5> Alterar dados</h5>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            
+            <form action="/alterar_dados" method="post">
+              <div class="form-group">
+                <input type="text"  name="nome" class="form-control" placeholder="Nome">
+              </div>
+                          
+              <div class="form-group">
+                <input type="password"  name="password" class="form-control" placeholder="Password">
+              </div>
+              
+              <div class="mt-4 mb-4">
+                <small class="form-text">
+                  Lembre-se sempre de anotar os dados alterados. Poderá sempre recuperar a sua password na página de login. A eliminação da sua conta é irreversível.
+                </small>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Confirmar alterações</button>
+
+            </form>
+            	<form action="/eliminar_conta">
+             <button type="submit" class="btn btn-danger btn-block">Eliminar conta</button>
+             </form>
+             <?php if($this->view->eliminar = false){ ?>
+             	<h1>Oooops. Ocorreu um erro! Tente mais tarde!</h1>
+           <?php  }  ?>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

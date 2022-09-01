@@ -1,0 +1,366 @@
+
+
+<nav class="navbar navbar-expand-lg menu">
+	<div class="container justify-content-center">
+	  <div class="navbar-nav">
+	  	<a class="menuItem" href="/timeline">
+	  		Timeline
+	  	</a>
+
+	   	<a class="menuItem" href="/settings">
+	  		Opções
+	  	</a>
+
+	  	<a class="menuItem" href="/sair">
+	  		Sair
+	  	</a>
+			<!--<img class="menuIco" />-->
+	  </div>
+	</div>
+</nav>
+
+<div class="container mt-5">
+	<div class="row pt-2">
+		
+		<div class="col-md-3">
+
+			<div class="perfil">
+				<div class="perfilTopo">
+
+				</div>
+
+				<div class="perfilPainel">
+					
+					<div class="row mt-2 mb-2">
+						<div class="col mb-2">
+							<span class="perfilPainelNome">
+								<?= $this->view->info_utilizador['nome']?>
+							</span>
+						</div>				
+
+					</div>
+
+					<div class="row mb-2">
+
+						<div class="col">
+							<span class="perfilPainelItem">Posts</span><br />
+							<span class="perfilPainelItemValor">
+								<a  href="/listagem_posts">
+								<?= $this->view->total_posts['total_posts'] ?>
+							</a>
+							</span>
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">A seguir</span><br />
+								<span class="perfilPainelItemValor">
+									<a href="/listagem_seguidores?tipo=a_seguir">														
+									<?= $this->view->total_a_seguir['total_a_seguir'] ?> 
+									</a>	
+								</span>									
+						</div>
+
+						<div class="col">
+							<span class="perfilPainelItem">Seguidores</span><br />
+							<span class="perfilPainelItemValor">
+								<a href="/listagem_seguidores?tipo=seguidores"> 
+								 <!--<?php print_r($this->view->total_seguidores) ?>-->
+								<?= $this->view->total_seguidores['total_seguidores'] ?> 
+								</a>
+							</span>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-6">
+			<div class="row mb-2">
+				<div class="col postBox">
+					<form method="post" action="/post">
+						<textarea class="form-control border border-primary" name="post-content" id="exampleFormControlTextarea1" rows="3"></textarea>
+						
+						<div class="col mt-2 d-flex justify-content-end">
+							<button type="submit" class="btn btn-primary">Share!</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+
+
+
+		<?php foreach($this->view->posts as $id_post => $post) { $numeroLikes = 0; $style = "";?>
+
+		<div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-12">
+            <div class="d-flex flex-column comment-section">
+                <div id="commentSection" class="bg-white p-2">
+                    <div class="d-flex flex-row user-info"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40">
+                        <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name"><?=$post['nome']?></span><span class="date text-black-50"><?=$post['data']?></span></div>
+                    	
+                        <?php foreach($this->view->numLikesPerPost as $numLikes => $nlikes){ 
+										//$teste = array_column($numLikes[$nlikes], 'id_post');
+										//print_r(array_column($this->view->numLikesPerPost, 'likes'));
+										$aux = $post['id'];
+										//print_r($aux);
+										if($nlikes['id_post'] == $aux){								
+											$numeroLikes = $nlikes['likes'];
+															
+										}																										
+								
+									;} ?>
+
+                    	
+						 <?php if($post['id_utilizador'] == $_SESSION['id']) {?>
+							<form method="get" action="/remove_post" class="ml-auto">					
+								<div class="col d-flex justify-content-end">
+								<!--	<button href="/remove_post?post_id=<?= ($post['id'])?>" class="btn btn-danger"></button>-->
+									<a href="/remove_post?post_id=<?= ($post['id'])?>" class="btn btn-danger"><small><i class="fas fa-trash-alt"></i></small></a>
+								<a onclick="edit('<?=$post['content']?>', '<?=$post['id']?>')"  class="btn btn-warning ml-1"><small><i class="fas fa-edit"></i></small></a>
+								</div>
+							</form>
+						<?php } ?>
+
+                    </div>
+                    
+                    <div id="inputDiv<?=$post['id']?>" class="mt-2">
+                        <p class="comment-text"><?=$post['content']?></p>                         
+                    </div>
+                   
+                </div>
+                <div class="bg-white">
+                    <div class="d-flex flex-row fs-12">
+                     			                					
+                      			<?php for($i = 0; $i < sizeof($this->view->renderLike); $i++) { ?>   
+                      			 <?php if($post['id'] == $this->view->renderLike[$i]['id_post'] && $this->view->renderLike[$i]['liked'] == 1){ $style = "#007bff";} } //print_r($this->view->renderLike[$i]['id_post']); }?>
+                      			                                                                                         	                                                                      	               		                    	                                            		
+                      	<div class="like p-2 pointer <?=$style?>"  style="cursor:pointer;">
+                        	 <a style="text-decoration: none;color:black; color:<?=$style?>" href="/like?post_id=<?= ($post['id'])?>"><span class="ml-1 "><i class="fa fa-thumbs-up"><?php if($numeroLikes > 1){echo ' ' .$numeroLikes;} ?> Like<?php if($numeroLikes > 1){echo "s";} ?></i></span></a>
+                        	
+                        </div>   
+                     
+                        <div data-toggle="collapse" data-target="#collapseComment<?=$post['id']?>" role="button" aria-expanded="false" aria-controls="collapseComment" class="like p-2 pointer" style="cursor:pointer;"><i class="fal fa-comment-alt-lines"></i><span class="ml-1">Comentar</span></div>      
+                  		   
+                    </div>
+                </div>
+                               
+                   <form method="post" action="/comentar?id_post=<?=$post['id']?>" class="collapse " id="collapseComment<?=$post['id']?>"> 
+	                     <div class="bg-light p-2" >
+	                    <div class="d-flex flex-row align-items-start"><img class="rounded-circle" src="https://i.imgur.com/RpzrMR2.jpg" width="40"><textarea name="content" class="border border-primary form-control ml-1 shadow-none textarea"></textarea></div>
+	                    <div name="post_id" class="mt-2 text-right"><button class="btn btn-primary btn-sm shadow-none" type="submit">Postar comentário</button>
+	                   </div>
+	                   	</div>                   
+                   </form>
+                              
+
+                    <div id="labelMostrarComentarios<?=$post['id']?>" class="justify-content-center text-center text-primary"data-toggle="collapse" style="cursor:pointer;" data-target="#collapseVerComments<?=$post['id']?>" role="button" aria-expanded="false" onclick="listarComentarios(<?=$post['id']?>)">Ver comentários</div>
+
+                     <div class="container justify-content-center mt-2 collapse" id="collapseVerComments<?=$post['id']?>">
+              					
+
+                     	</div> 
+              
+
+            </div>
+        </div>
+    </div>
+</div>
+<?php } ?>
+
+		
+			<div class="row mt-5 justify-content-center"> 
+
+				<nav aria-label="...">
+					  <ul class="pagination">
+					    <li class="page-item">
+					      <a class="page-link" href="?pagina=1" tabindex="-1">Primeira</a>
+					    </li>	
+					  
+
+					    <?php for($i = 1; $i <= $this->view->total_de_paginas; $i++) { ?>
+					    <li class="page-item <?=$this->view->pagina_ativa == $i ? 'active' : '' ?>">
+					    	<a class="page-link" href="?pagina=<?=$i?>"><?=$i?></a>
+					    </li>
+					  <?php } ?>
+					    <li class="page-item">
+					      <a class="page-link " href="?pagina=<?= $this->view->total_de_paginas?>">Última</a>
+					    </li>
+					  </ul>
+				</nav>
+
+			</div>
+
+
+		</div>
+
+
+		<div class="col-md-3">
+			<div class="quemSeguir">
+				<span class="quemSeguirTitulo">Quem seguir</span><br />
+				<hr />
+				<a href="/quem_seguir" class="quemSeguirTxt">Procurar por pessoas conhecidas</a>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+	          
+
+/*
+                    <div class="container justify-content-center mt-2 collapse" id="collapseVerComments<?=$post['id']?>">
+   						 <div class="d-flex justify-content-center ">   
+        			 	   <div class="d-flex justify-content-between pt-2">
+             			     <div class="second py-2 px-2"> <span class="text1">Type your note, and hit enter to add it</span>         
+            				 <div><img src="https://i.imgur.com/AgAC1Is.jpg" width="18"><span class="text2">Martha</span></div>            	   
+          				  	 </div>
+       					   </div>
+   						 </div>       
+					</div>
+*/
+			
+
+
+function getComments(id_post) {
+    var tmp = null;
+    $.ajax({
+        'async': false,
+        'type': "POST",
+        'global': false,
+        //'dataType': 'html',
+        url:'/listar_comentarios',
+        data:{post:id_post},
+        'success': function (data) {
+            tmp = data;
+        }
+    });
+    return tmp;
+};	
+
+
+		function listarComentarios(id_post){
+
+					labelComentarios = document.getElementById('labelMostrarComentarios' + id_post);
+
+					if(labelComentarios.innerHTML == "Ver comentários"){
+						labelComentarios.innerHTML = "Esconder Comentários";
+					}else{
+						labelComentarios.innerHTML = "Ver comentários";
+					}
+
+					const parent = document.getElementById("collapseVerComments" +  id_post);
+					while (parent.firstChild) {
+   						 parent.firstChild.remove()
+						}
+
+
+
+					let comentarios = getComments(id_post);	
+					let resultado = Object.values(JSON.parse(comentarios));	
+					console.log(resultado.length);
+					//console.log(resultado);
+					if(resultado.length == 0){
+
+						divMae = document.getElementById("collapseVerComments" +  id_post);
+						let pFaltaResultado = document.createElement('p');
+						pFaltaResultado.innerHTML = "Não existem comentários...";
+						divMae.appendChild(pFaltaResultado);
+
+					}
+					resultado.forEach(function (item, index) {
+  					 	
+       			 	let divSecondContainer = document.createElement('div');	
+       			 	divSecondContainer.classList.add("card");
+       			 	divSecondContainer.id = "divListaComentarios";
+       			 	divSecondContainer.classList.add("border-right-1");
+  					
+       			 	let divThirdContainer = document.createElement('div');
+       			 	divThirdContainer.classList.add("card-body");
+
+
+  					
+  					let h5NomeUtilizador = document.createElement('h5');
+  					h5NomeUtilizador.innerHTML = item['nome'];
+  					h5NomeUtilizador.classList.add('card-title');
+			
+  					
+  					let pComentario = document.createElement('p');
+  					pComentario.innerHTML = item['comentario'];
+  					pComentario.classList.add("card-text");
+				
+
+  					divMae = document.getElementById("collapseVerComments" +  id_post);
+  					divMae.appendChild(divSecondContainer);
+  					divSecondContainer.appendChild(divThirdContainer);
+					divThirdContainer.appendChild(h5NomeUtilizador);
+					divThirdContainer.appendChild(pComentario);
+					
+  					
+
+				});
+
+		}
+
+
+		function edit(conteudo,idDiv){
+		let elementDiv = document.getElementById('inputDiv' + idDiv);
+		let element = document.getElementById('inputContent');
+		let inputEdit = document.getElementById('inputEdit' + idDiv);
+		let buttonEdit = document.getElementById('buttonEdit' + idDiv);
+		let formEdit = document.getElementById('formEdit' + idDiv);
+		let input;
+		let button;
+		let form;	
+
+
+	if(!document.getElementById('inputEdit' + idDiv)){
+		input = document.createElement('input');
+		input.classList.add("comment-text");
+		input.value = conteudo;
+		input.id = "inputEdit" + idDiv;
+		input.setAttribute("name", "postTexto");
+	}
+
+
+	if(!document.getElementById('buttonEdit' + idDiv)){
+			button = document.createElement('button');
+			button.classList.add("btn");
+			button.classList.add("btn-success");
+			button.classList.add("ml-2");
+			button.innerHTML = "Guardar";
+			button.id = "buttonEdit" + idDiv;
+			button.type = "submit";	
+			}	
+
+
+	if(!document.getElementById('formEdit' + idDiv)){
+		form = document.createElement('form');
+		form.id = "formEdit"+ idDiv;				
+		form.action = "/alterar_post?id=" + idDiv;
+		form.method = "post";
+		form.appendChild(input);
+		form.appendChild(button);
+		elementDiv.appendChild(form);
+
+	}	
+
+
+	else{
+
+
+		document.getElementById('formEdit' + idDiv).remove();
+				
+		//formEdit.removeChild(formEdit);
+		
+	}		
+						
+		
+	}
+
+</script>
